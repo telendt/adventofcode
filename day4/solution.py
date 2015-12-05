@@ -4,14 +4,20 @@ import sys
 import itertools
 
 
-def find_matching(prefix: str, n: int) -> int:
-    p = prefix.encode()
+def mine(secret: str, n: int) -> int:
+    r"""
+    >>> mine("abcdef", 5)
+    609043
+    >>> mine("pqrstuv", 5)
+    1048970
+    """
+    p = secret.encode()
     for i in itertools.count(1):
         if hashlib.md5(b'%s%d' % (p, i)).hexdigest().startswith('0' * n):
             return i
 
 
 if __name__ == '__main__':
-    prefix = sys.argv[1]
-    print(find_matching(prefix, 5))
-    print(find_matching(prefix, 6))
+    secret = sys.argv[1]
+    print(mine(secret, 5))
+    print(mine(secret, 6))
