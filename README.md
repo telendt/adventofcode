@@ -1,1 +1,2 @@
-Solutions of [Advent of Code](http://adventofcode.com/) in Python 3.
+Solutions to [Advent of Code](http://adventofcode.com/) challenges in
+Python 3.
