@@ -26,7 +26,7 @@ COMMANDS = {
 }
 Task = NamedTuple('Task', [('name', str),
                            ('deps', List[str]),
-                           ('fun', Callable[[Mapping[str, int]], None])])
+                           ('call', Callable[[Mapping[str, int]], int])])
 
 
 def parse_task(line: str) -> Task:
@@ -45,12 +45,13 @@ def parse_task(line: str) -> Task:
     else:
         raise ValueError('incorrect format "{}"'.format(line))
 
-    def f(data: Mapping[str, int]) -> None:
-        data[right] = cmd(*[int(p) if p.isdigit() else data[p]
-                            for p in params])
+    def call(env: Mapping[str, int]) -> int:
+        return cmd(*[int(p) if p.isdigit() else env[p]
+                     for p in params])
+
     return Task(name=right,
                 deps=set(p for p in params if not p.isdigit()),
-                fun=f)
+                call=call)
 
 
 if __name__ == '__main__':
@@ -68,7 +69,7 @@ if __name__ == '__main__':
     values = {}
     while no_deps:
         task = no_deps.pop()
-        task.fun(values)
+        values[task.name] = task.call(env=values)
         for dependent in dependents[task.name]:
             dependent.deps.remove(task.name)
             if not dependent.deps:
