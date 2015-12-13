@@ -46,13 +46,6 @@ def max_happiness(d: Mapping[str, Mapping[str, int]]) -> int:
     return max(_perm_total(d))
 
 
-def f(x, s, d):
-    if len(s) == 1:
-        y = s.pop()
-        return d[x][y] + d[y][x]
-    return max(f(x, {y, }, d) + f(y, s - {x, y}, d)
-               for y in s)
-
 if __name__ == '__main__':
     table = collections.defaultdict(dict)
     for line in sys.stdin:
