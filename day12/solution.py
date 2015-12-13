@@ -32,15 +32,15 @@ def sum_nums(obj: Any, *, skip_val: Optional[str]=None) -> int:
     """
     if isinstance(obj, numbers.Number):
         return obj
-    else:
-        if isinstance(obj, collections.abc.Mapping):
-            obj = obj.values()
-            if skip_val is not None and skip_val in obj:
-                return 0
-        if isinstance(obj, collections.abc.Iterable) and \
-           not isinstance(obj, (str, bytes, bytearray)):
-            return sum(sum_nums(e, skip_val=skip_val)
-                       for e in obj)
+    if isinstance(obj, (str, bytes, bytearray)):
+        return 0
+    if isinstance(obj, collections.abc.Mapping):
+        obj = obj.values()
+        if skip_val is not None and skip_val in obj:
+            return 0
+    if isinstance(obj, collections.abc.Iterable):
+        return sum(sum_nums(e, skip_val=skip_val)
+                   for e in obj)
     return 0
 
 
